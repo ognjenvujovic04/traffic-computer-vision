@@ -1,0 +1,6 @@
+# Ignore all the files(data)
+*
+# Except the following
+!rerequirements.txt
+!traffic.py
+!.gitignore
