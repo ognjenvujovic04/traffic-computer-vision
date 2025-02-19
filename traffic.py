@@ -4,6 +4,8 @@ import os
 import sys
 import time
 import tensorflow as tf
+from multiprocessing import Pool, cpu_count
+from glob import glob
 
 from sklearn.model_selection import train_test_split
 
@@ -78,13 +80,20 @@ def load_data(data_dir):
     images = []
     labels = []
     
-    for folder in os.listdir(data_dir):
-        folder_path = data_dir + os.sep + folder
-        for file in os.listdir(folder_path):
-            img = cv2.imread(folder_path + os.sep + file)
-            img = cv2.resize(img, (IMG_WIDTH, IMG_HEIGHT))
-            images.append(img)
-            labels.append(folder)
+    # for folder in os.listdir(data_dir):
+    #     folder_path = data_dir + os.sep + folder
+    #     for file in os.listdir(folder_path):
+    #         img = cv2.imread(folder_path + os.sep + file)
+    #         img = cv2.resize(img, (IMG_WIDTH, IMG_HEIGHT))
+    #         images.append(img)
+    #         labels.append(folder)
+    
+    image_paths = glob(os.path.join(data_dir, '*', '*'))
+    
+    labels = [os.path.basename(os.path.dirname(path)) for path in image_paths]
+    
+    with Pool(cpu_count()) as pool:
+        images = pool.map(load_image, image_paths)
     
     end = time.time()
 
@@ -129,6 +138,9 @@ def get_model(num_categories):
     return model
 
 def convert_time(seconds):
+    """
+    Convert seconds into a human-readable format (HH:MM:SS).
+    """
     seconds = seconds % (24 * 3600)
     hour = seconds // 3600
     seconds %= 3600
@@ -137,6 +149,15 @@ def convert_time(seconds):
      
     return "%d:%02d:%02d" % (hour, minutes, seconds)
 
+
+def load_image(file_path):
+    """
+    Load and resize an image from the given file path.
+    """
+    img = cv2.imread(file_path)
+    if img is not None:
+        img = cv2.resize(img, (IMG_WIDTH, IMG_HEIGHT))
+    return img
 
 if __name__ == "__main__":
     main()
