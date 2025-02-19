@@ -4,9 +4,9 @@ import os
 import sys
 import time
 import tensorflow as tf
+import matplotlib.pyplot as plt
 from multiprocessing import Pool, cpu_count
 from glob import glob
-
 from sklearn.model_selection import train_test_split
 
 EPOCHS = 10
@@ -65,6 +65,33 @@ def main():
         filename = sys.argv[2]
         model.save(filename)
         print(f"Model saved to {filename}.")
+
+    # Plot misclassified images
+    plot_misclassified(model, x_test, y_test)
+
+def plot_misclassified(model, x_test, y_test):
+    """
+    Plot misclassified images along with their true and predicted labels.
+    """
+    y_pred = model.predict(x_test)
+    y_pred_classes = np.argmax(y_pred, axis=1)
+    y_true = np.argmax(y_test, axis=1)
+
+    misclassified_indices = np.where(y_pred_classes != y_true)[0]
+    num_images = min(12, len(misclassified_indices))
+
+    if num_images == 0:
+        print("No misclassified images found.")
+        return
+
+    plt.figure(figsize=(10, 10))
+    for i, idx in enumerate(misclassified_indices[:num_images]):
+        plt.subplot(3, 4, i + 1)
+        plt.imshow(x_test[idx].astype("uint8"))
+        plt.title(f"True: {y_true[idx]}, Pred: {y_pred_classes[idx]}")
+        plt.axis("off")
+    plt.tight_layout()
+    plt.show()
 
 
 def load_data(data_dir):
