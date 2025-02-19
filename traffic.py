@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os
 import sys
+import time
 import tensorflow as tf
 
 from sklearn.model_selection import train_test_split
@@ -71,6 +72,9 @@ def load_data(data_dir):
     be a list of integer labels, representing the categories for each of the
     corresponding `images`.
     """
+
+    start = time.time()
+    
     images = []
     labels = []
     
@@ -82,6 +86,9 @@ def load_data(data_dir):
             images.append(img)
             labels.append(folder)
     
+    end = time.time()
+
+    print(f"\nTime taken to load the data was {convert_time(end-start)} seconds\n")
     return (images, labels)
 
 
@@ -120,6 +127,15 @@ def get_model(num_categories):
     )   
 
     return model
+
+def convert_time(seconds):
+    seconds = seconds % (24 * 3600)
+    hour = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+     
+    return "%d:%02d:%02d" % (hour, minutes, seconds)
 
 
 if __name__ == "__main__":
