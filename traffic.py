@@ -131,8 +131,11 @@ def get_model(num_categories):
         # Flattening
         tf.keras.layers.Flatten(),
 
-        # Add a hidden layer with dropout
-        tf.keras.layers.Dense(128, activation="relu"),
+        # Fully connected layers
+        tf.keras.layers.Dense(512, activation="relu"),
+        tf.keras.layers.Dropout(0.5),  
+
+        tf.keras.layers.Dense(256, activation="relu"),
         tf.keras.layers.Dropout(0.5),
 
         # Add an output layer with output units for sign categories
