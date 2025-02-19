@@ -9,7 +9,6 @@ from sklearn.model_selection import train_test_split
 EPOCHS = 10
 IMG_WIDTH = 30
 IMG_HEIGHT = 30
-NUM_CATEGORIES = 43
 TEST_SIZE = 0.4
 
 
@@ -22,6 +21,20 @@ def main():
     # Get image arrays and labels for all image files
     images, labels = load_data(sys.argv[1])
 
+    if sys.argv[1] != "gtsrb":
+        while True:
+            try:
+                num_categories = int(input("\nInput number of categories for this dataset: "))
+                if num_categories>2:
+                    break
+                else:
+                    print("Number should be greater than 1")
+            except:
+                print("Input number!")
+            
+    else:
+        num_categories = 43
+
     # Split data into training and testing sets
     labels = tf.keras.utils.to_categorical(labels)
     x_train, x_test, y_train, y_test = train_test_split(
@@ -29,7 +42,7 @@ def main():
     )
 
     # Get a compiled neural network
-    model = get_model()
+    model = get_model(num_categories)
 
     # Fit model on training data
     model.fit(x_train, y_train, epochs=EPOCHS)
@@ -72,7 +85,7 @@ def load_data(data_dir):
     return (images, labels)
 
 
-def get_model():
+def get_model(num_categories):
     """
     Returns a compiled convolutional neural network model. Assume that the
     `input_shape` of the first layer is `(IMG_WIDTH, IMG_HEIGHT, 3)`.
@@ -96,7 +109,7 @@ def get_model():
         tf.keras.layers.Dropout(0.5),
 
         # Add an output layer with output units for sign categories
-        tf.keras.layers.Dense(3, activation="softmax")
+        tf.keras.layers.Dense(num_categories, activation="softmax")
         
     ])
     
