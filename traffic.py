@@ -87,7 +87,9 @@ def plot_misclassified(model, x_test, y_test):
     plt.figure(figsize=(10, 10))
     for i, idx in enumerate(misclassified_indices[:num_images]):
         plt.subplot(3, 4, i + 1)
-        plt.imshow(x_test[idx].astype("uint8"))
+        img = x_test[idx].astype("uint8")        
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        plt.imshow(img_rgb)
         plt.title(f"True: {y_true[idx]}, Pred: {y_pred_classes[idx]}")
         plt.axis("off")
     plt.tight_layout()
