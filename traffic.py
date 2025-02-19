@@ -21,9 +21,16 @@ def main():
     if len(sys.argv) not in [2, 3]:
         sys.exit("Usage: python traffic.py data_directory [model.h5]")
 
-    # Get image arrays and labels for all image files
-    images, labels = load_data(sys.argv[1])
-
+    # Get image arrays and labels for all image files, check if they are already cached
+    cache_path = "cached_data" + os.sep + sys.argv[1]
+    
+    if os.path.isdir(cache_path):
+        images, labels = load_cached_data(cache_path)
+        print("\nData was loaded from cache\n")
+    else:
+        images, labels = load_data(sys.argv[1])
+        save_cached_data(images, labels, cache_path)
+        
     if sys.argv[1] != "gtsrb":
         while True:
             try:
@@ -158,6 +165,17 @@ def load_image(file_path):
     if img is not None:
         img = cv2.resize(img, (IMG_WIDTH, IMG_HEIGHT))
     return img
+
+def save_cached_data(images, labels, save_path):
+    os.makedirs(save_path, exist_ok=True)
+    
+    np.save(os.path.join(save_path, "images.npy"), images)
+    np.save(os.path.join(save_path, "labels.npy"), labels)
+
+def load_cached_data(save_path):
+    images = np.load(os.path.join(save_path, "images.npy"))
+    labels = np.load(os.path.join(save_path, "labels.npy"))
+    return images, labels
 
 if __name__ == "__main__":
     main()
