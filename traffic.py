@@ -116,15 +116,19 @@ def get_model(num_categories):
     """
     model = tf.keras.models.Sequential([
         
-        # Convolution layer, 20 filters 3x3 kernel
-        tf.keras.layers.Conv2D(
-            20, (3, 3), activation="relu", input_shape = (IMG_WIDTH, IMG_HEIGHT, 3) 
-        ), 
+        # First convolutional layer
+        tf.keras.layers.Conv2D(32, (3, 3), activation="relu", input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
+        tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
         
-        # Maxpooling layer 3x3 pool size
-        tf.keras.layers.MaxPooling2D(pool_size=(3, 3)),
+        # Second convolutional layer
+        tf.keras.layers.Conv2D(64, (3, 3), activation="relu"),
+        tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
 
-        # Flatten units
+        # Third convolutional layer
+        tf.keras.layers.Conv2D(128, (3, 3), activation="relu"),
+        tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
+
+        # Flattening
         tf.keras.layers.Flatten(),
 
         # Add a hidden layer with dropout
@@ -133,8 +137,8 @@ def get_model(num_categories):
 
         # Add an output layer with output units for sign categories
         tf.keras.layers.Dense(num_categories, activation="softmax")
-        
     ])
+
     
     model.compile(
         optimizer="adam",
