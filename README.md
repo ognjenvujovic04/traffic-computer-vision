@@ -3,6 +3,26 @@
 ## Overview
 This project utilizes TensorFlow to train a neural network capable of classifying traffic signs from the German Traffic Sign Recognition Benchmark (GTSRB) dataset. The AI model is trained on labeled images and can predict which traffic sign appears in a given photograph. It was developed as part of the CS50’s Introduction to Artificial Intelligence with Python course.
 
+## Example Traffic Signs
+
+### Correctly Classified Signs
+<p align="left">
+    <img src="assets/correct/correct_11_true18_pred18.jpg" width="150" >
+    <img src="assets/correct/correct_7_true38_pred38.jpg" width="150" >
+    <img src="assets/correct/correct_10_true1_pred1.jpg" width="150" >
+    <img src="assets/correct/correct_4_true9_pred9.jpg" width="150" >
+    <img src="assets/correct/correct_3_true17_pred17.jpg" width="150" >
+</p>
+
+### Misclassified Examples
+<p align="left">
+    <img src="assets/incorrect/incorrect_1_true2_pred1.jpg" width="150" >
+    <img src="assets/incorrect/incorrect_7_true2_pred1.jpg" width="150" >
+    <img src="assets/incorrect/incorrect_10_true8_pred1.jpg" width="150" >
+    <img src="assets/incorrect/incorrect_8_true5_pred3.jpg" width="150" >
+    <img src="assets/incorrect/incorrect_11_true7_pred5.jpg" width="150" >
+</p>
+
 ## Installation
 
 1. **Download the distribution code**:  
